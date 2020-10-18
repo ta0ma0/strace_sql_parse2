@@ -16,6 +16,7 @@ except ModuleNotFoundError:
 
 select_list = []
 select_list_clean = []
+duration_list = []
 try:
     sys.argv[1]
 except IndexError:
@@ -33,7 +34,7 @@ for el in log_list:
 for el in select_list:
     clean_select = (el[0][0:-1])
     if not re.search('\$|\@', clean_select):
-        clean_select = re.sub('\\.', ' ', clean_select)
+        clean_select = re.sub('\\\\.', ' ', clean_select)
         select_list_clean.append(clean_select)
 
 connection = pymysql.Connect(host='r95316mu.beget.tech',
@@ -53,13 +54,18 @@ with warnings.catch_warnings():
         sql2 = "show profiles"
         cursor.execute(sql0)
         for el in select_list_clean:
+            # count = 10
+            # while count >= 0:
             try:
                 cursor.execute(el)
-            except pymysql.err.ProgrammingError:
-                pass
-        cursor.execute(sql2)
-        result = cursor.fetchall()
-        sorted_result = sorted(result, key=get_val)
-        # print(sorted_result)
-        for el in sorted_result:
-            print('{:<10s}{:>9f}{:^12s}{:<12s}'.format('Длительность:', el['Duration'], 'Запрос:', el['Query']))
+                # count -= 1
+            except pymysql.err.ProgrammingError as err:
+                print(err)
+                sys.exit()
+            cursor.execute(sql2)
+            duration_list.append(cursor.fetchone())
+
+    sorted_result = sorted(duration_list, key=get_val)
+    for el in sorted_result:
+        print('{:<10s}{:>9f}{:^12s}{:<12s}'.format('Длительность:', el['Duration'], 'Запрос:', el['Query']))
+    print('Запросов всего:', len(select_list_clean))
