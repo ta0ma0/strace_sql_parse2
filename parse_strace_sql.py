@@ -4,8 +4,10 @@ import sys
 import re
 import warnings
 
+
 def get_val(e):
-  return e['Duration']
+    return e['Duration']
+
 
 try:
     import pymysql
@@ -50,15 +52,11 @@ with warnings.catch_warnings():
     # warnings.simplefilter("error", category=pymysql.Warning)
     with connection.cursor() as cursor:
         sql0 = "set profiling=1"
-        sql = "SELECT * FROM `wp_options` LIMIT 2"
         sql2 = "show profiles"
         cursor.execute(sql0)
         for el in select_list_clean:
-            # count = 10
-            # while count >= 0:
             try:
                 cursor.execute(el)
-                # count -= 1
             except pymysql.err.ProgrammingError as err:
                 print(err)
                 sys.exit()
