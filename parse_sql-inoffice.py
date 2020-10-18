@@ -37,10 +37,10 @@ for el in select_list:
         clean_select = re.sub('\\\\.', ' ', clean_select)
         select_list_clean.append(clean_select)
 
-connection = pymysql.Connect(host='r95316mu.beget.tech',
-                             user='r95316mu_parser',
-                             password='br&N1Em61',
-                             db='r95316mu_parser',
+connection = pymysql.Connect(host='localhost',
+                             user=sys.argv[2],
+                             password=sys.argv[3],
+                             db=sys.argv[2],
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
