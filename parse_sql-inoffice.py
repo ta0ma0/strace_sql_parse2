@@ -4,11 +4,15 @@ import sys
 import re
 import warnings
 
+def get_val(e):
+  return e['Duration']
+
 try:
     import pymysql
 except ModuleNotFoundError:
     print('Устанавливаем pymysql')
-    subprocess.Popen(['pip3', 'install', 'pymysql'], stdout=subprocess.PIPE)
+    install = subprocess.Popen(['pip3', 'install', 'pymysql'], stdout=subprocess.PIPE)
+    output, error = install.communicate()
 
 select_list = []
 select_list_clean = []
@@ -29,7 +33,7 @@ for el in log_list:
 for el in select_list:
     clean_select = (el[0][0:-1])
     if not re.search('\$|\@', clean_select):
-        clean_select = re.sub('\\.', '', clean_select)
+        clean_select = re.sub('\\.', ' ', clean_select)
         select_list_clean.append(clean_select)
 
 connection = pymysql.Connect(host='r95316mu.beget.tech',
@@ -55,5 +59,7 @@ with warnings.catch_warnings():
                 pass
         cursor.execute(sql2)
         result = cursor.fetchall()
-        for el in result:
+        sorted_result = sorted(result, key=get_val)
+        # print(sorted_result)
+        for el in sorted_result:
             print('{:<10s}{:>9f}{:^12s}{:<12s}'.format('Длительность:', el['Duration'], 'Запрос:', el['Query']))
