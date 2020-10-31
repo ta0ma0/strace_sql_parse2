@@ -59,7 +59,8 @@ with warnings.catch_warnings():
                 cursor.execute(el)
             except pymysql.err.ProgrammingError as err:
                 print(err)
-                sys.exit()
+                print(el)
+                continue
             cursor.execute(sql2)
             duration_list.append(cursor.fetchone())
 
