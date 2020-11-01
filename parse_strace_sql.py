@@ -15,6 +15,7 @@ except ModuleNotFoundError:
     print('Устанавливаем pymysql')
     install = subprocess.Popen(['pip3', 'install', 'pymysql'], stdout=subprocess.PIPE)
     output, error = install.communicate()
+    import pymysql
 
 select_list = []
 select_list_clean = []
@@ -65,6 +66,8 @@ with warnings.catch_warnings():
             duration_list.append(cursor.fetchone())
 
     sorted_result = sorted(duration_list, key=get_val)
+    all_time_sum = 0
     for el in sorted_result:
         print('{:<10s}{:>9f}{:^12s}{:<12s}'.format('Длительность:', el['Duration'], 'Запрос:', el['Query']))
-    print('Запросов всего:', len(select_list_clean))
+        all_time_query = el['Duration'] + all_time_sum
+    print('Запросов всего:', len(select_list_clean), 'Общая длительность:', all_time_query, 'сек')
