@@ -66,8 +66,8 @@ with warnings.catch_warnings():
             duration_list.append(cursor.fetchone())
 
     sorted_result = sorted(duration_list, key=get_val)
-    all_time_sum = 0
+    all_time_query = 0
     for el in sorted_result:
         print('{:<10s}{:>9f}{:^12s}{:<12s}'.format('Длительность:', el['Duration'], 'Запрос:', el['Query']))
-        all_time_query = el['Duration'] + all_time_sum
-    print('Запросов всего:', len(select_list_clean), 'Общая длительность:', all_time_query, 'сек')
+        all_time_query += el['Duration']
+    print('Запросов всего:', len(select_list_clean), 'Общая длительность:', round(all_time_query, 4), 'сек')
