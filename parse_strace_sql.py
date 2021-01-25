@@ -58,7 +58,7 @@ with warnings.catch_warnings():
         for el in select_list_clean:
             try:
                 cursor.execute(el)
-            except pymysql.err.ProgrammingError as err:
+            except Exception as err:
                 print(err)
                 print(el)
                 continue
